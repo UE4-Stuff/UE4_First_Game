@@ -4,6 +4,8 @@
 #include "ExtractionZone.h"
 #include "Components/BoxComponent.h"
 #include "Components/DecalComponent.h"
+#include "FPSCharacter.h"
+#include "FPSGameMode.h"
 
 // Sets default values
 AExtractionZone::AExtractionZone()
@@ -18,7 +20,7 @@ AExtractionZone::AExtractionZone()
 	SetRootComponent(Hitbox);
 
 	Hitbox->OnComponentBeginOverlap.AddDynamic(this, &AExtractionZone::ZoneEntered);
-	Hitbox->SetHiddenInGame(false);
+	//Hitbox->SetHiddenInGame(false);
 
 	Decal = CreateDefaultSubobject<UDecalComponent>("Decal");
 	Decal->DecalSize = FVector(200.0f);
@@ -41,6 +43,12 @@ void AExtractionZone::BeginPlay()
 
 void AExtractionZone::ZoneEntered(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-
+	AFPSCharacter* Character = Cast<AFPSCharacter>(OtherActor);
+	if (Character && Character->HoldingObjective) {
+		AFPSGameMode* GM = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode());
+		if (GM) {
+			GM->MissionSuccess(Character);
+		}
+	}
 }
 
