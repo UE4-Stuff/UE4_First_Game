@@ -4,6 +4,9 @@
 #include "FPSHUD.h"
 #include "FPSCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "PlayerHUD.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/TextBlock.h"
 
 AFPSGameMode::AFPSGameMode()
 {
@@ -11,15 +14,19 @@ AFPSGameMode::AFPSGameMode()
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/Blueprints/BP_Player"));
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 
-	// use our custom HUD class
-	HUDClass = AFPSHUD::StaticClass();
+	// use our custom Hud class
+	HUDClass = UPlayerHUD::StaticClass();
 }
 
-void AFPSGameMode::MissionSuccess(APawn* pawn)
+void AFPSGameMode::MissionSuccess(APawn* Pawn)
 {
-	if (pawn) {
-		pawn->DisableInput(nullptr);
-		OnMissionSuccess(pawn);
+	if (Pawn) {
+		Pawn->DisableInput(nullptr);
+		OnMissionSuccess(Pawn);
+		/*UPlayerHUD* Hud = Cast<UPlayerHUD>(UGameplayStatics::GetPlayerController(this->GetOwner(), 0)->GetHUD());
+		if (Hud && Hud->Message) {
+			Hud->Message->RemoveFromParent();
+		}*/
 	}
 
 }

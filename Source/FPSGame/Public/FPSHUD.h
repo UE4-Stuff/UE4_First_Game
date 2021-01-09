@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+#include "Blueprint/Userwidget.h"
 #include "FPSHUD.generated.h"
 
 class UTexture2D;
@@ -24,6 +25,9 @@ public:
 
 	/** Primary draw call for the HUD */
 	virtual void DrawHUD() override;
+
+	//UPROPERTY(BlueprintReadWrite, meta=(BindWidget))
+	//UUserWidget* Text;
 
 };
 
