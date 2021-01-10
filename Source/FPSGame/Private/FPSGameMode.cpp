@@ -27,6 +27,17 @@ void AFPSGameMode::MissionSuccess(APawn* Pawn)
 		if (Hud && Hud->Message) {
 			Hud->Message->RemoveFromParent();
 		}*/
+
+		APlayerController* PC = Cast<APlayerController>(Pawn->GetController());
+		if (PC)
+		{
+			TArray<AActor*> ReturnedActors;
+			UGameplayStatics::GetAllActorsOfClass(this, SpectatorCamClass, ReturnedActors);
+			if (ReturnedActors.Num() > 0)
+			{
+				PC->SetViewTargetWithBlend(ReturnedActors[0], 1.0f, EViewTargetBlendFunction::VTBlend_Cubic);
+			}
+		}
 	}
 
 }

@@ -7,6 +7,7 @@
 #include "ExtractionZone.generated.h"
 
 class UBoxComponent;
+class USoundBase;
 
 UCLASS()
 class FPSGAME_API AExtractionZone : public AActor
@@ -29,6 +30,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UDecalComponent* Decal;
+
+	UPROPERTY(EditDefaultsOnly, Category="Sounds")
+	USoundBase* NoObjectiveSfx;
+
 
 public:	
 	// Called every frame

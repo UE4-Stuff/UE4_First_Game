@@ -6,6 +6,7 @@
 #include "Components/DecalComponent.h"
 #include "FPSCharacter.h"
 #include "FPSGameMode.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AExtractionZone::AExtractionZone()
@@ -44,11 +45,20 @@ void AExtractionZone::BeginPlay()
 void AExtractionZone::ZoneEntered(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AFPSCharacter* Character = Cast<AFPSCharacter>(OtherActor);
-	if (Character && Character->HoldingObjective) {
-		AFPSGameMode* GM = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode());
-		if (GM) {
-			GM->MissionSuccess(Character);
+	if (Character) 
+	{
+		if (Character->HoldingObjective) 
+		{
+			AFPSGameMode* GM = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode());
+			if (GM) 
+			{
+				GM->MissionSuccess(Character);
+			}
+		}
+		else {
+			UGameplayStatics::PlaySound2D(this, NoObjectiveSfx);
 		}
 	}
+
 }
 
