@@ -25,6 +25,9 @@ ALaunchpad::ALaunchpad()
 	Hitbox->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Overlap);
 	Hitbox->OnComponentBeginOverlap.AddDynamic(this, &ALaunchpad::Overlap);
 	Hitbox->SetupAttachment(Pad);
+
+	Angle = 60.0f;
+	Magnitude = 1500.0f;
 }
 
 // Called when the game starts or when spawned
@@ -39,14 +42,18 @@ void ALaunchpad::Overlap(UPrimitiveComponent* OverlappedComponent, AActor* Other
 	ACharacter* Character = Cast<ACharacter>(OtherActor);
 	if (Character)
 	{
-		Character->LaunchCharacter(FVector(0.0f, 5000.0f, 5000.0f), true, true);
+		FRotator rot = GetActorRotation();
+		rot.Pitch += Angle;
+		Character->LaunchCharacter(rot.Vector() * Magnitude, false, false);
 		//OtherComp->AddImpulse(FVector(0.0f, 5000.0f, 5000.0f));
 		//OtherComp->Add
 		UGameplayStatics::SpawnEmitterAtLocation(this, LaunchFX, GetActorLocation());
 		UGameplayStatics::PlaySound2D(this, LaunchSFX);
 	}
 	else if (OtherComp && OtherComp->IsSimulatingPhysics() ) {
-		OtherComp->AddImpulse(FVector(0.0f, 5000.0f, 5000.0f), NAME_None, true);
+		FRotator rot = GetActorRotation();
+		rot.Pitch += Angle;
+		OtherComp->AddImpulse(rot.Vector() * Magnitude, NAME_None, true);
 		UGameplayStatics::SpawnEmitterAtLocation(this, LaunchFX, GetActorLocation());
 		UGameplayStatics::PlaySound2D(this, LaunchSFX);
 	}

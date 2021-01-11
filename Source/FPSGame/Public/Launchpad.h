@@ -34,6 +34,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
 	class USoundBase* LaunchSFX;
 
+	UPROPERTY(EditAnywhere, Category = "Properties")
+	float Magnitude;
+
+	UPROPERTY(EditAnywhere, Category = "Properties")
+	float Angle;
+
 	UFUNCTION()
 	void Overlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
