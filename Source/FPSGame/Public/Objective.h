@@ -30,6 +30,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Effects")
 	UParticleSystem* PickupFX;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	USoundBase* PickupSFX;
+
 	void PlayFX();
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
