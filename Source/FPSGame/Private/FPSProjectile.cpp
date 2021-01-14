@@ -22,8 +22,8 @@ AFPSProjectile::AFPSProjectile()
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileMovement->UpdatedComponent = CollisionComp;
-	ProjectileMovement->InitialSpeed = 4000.f;
-	ProjectileMovement->MaxSpeed = 4000.f;
+	ProjectileMovement->InitialSpeed = 3500.f;
+	ProjectileMovement->MaxSpeed = 3500.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
 

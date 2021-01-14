@@ -3,6 +3,7 @@
 
 #include "AIGuard.h"
 #include "Perception/PawnSensingComponent.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 AAIGuard::AAIGuard()
@@ -11,6 +12,7 @@ AAIGuard::AAIGuard()
 	PrimaryActorTick.bCanEverTick = true;
 
 	PawnSense = CreateDefaultSubobject<UPawnSensingComponent>("PawnSense");
+	PawnSense->OnSeePawn.AddDynamic(this, &AAIGuard::PawnSeen);
 }
 
 // Called when the game starts or when spawned
@@ -34,3 +36,12 @@ void AAIGuard::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void PawnSeen(APawn* SeenPawn) 
+{
+	if (SeenPawn)
+	{
+
+		DrawDebugSphere(GetWorld(), SeenPawn->GetActorLocation(), 32.0f, 12, FColor::Yellow, false, 10.0f);
+	}
+	
+}
