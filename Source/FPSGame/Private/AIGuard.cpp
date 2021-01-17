@@ -13,6 +13,7 @@ AAIGuard::AAIGuard()
 
 	PawnSense = CreateDefaultSubobject<UPawnSensingComponent>("PawnSense");
 	PawnSense->OnSeePawn.AddDynamic(this, &AAIGuard::PawnSeen);
+	PawnSense->OnHearNoise.AddDynamic(this, &AAIGuard::NoiseHeard);
 }
 
 // Called when the game starts or when spawned
@@ -36,12 +37,21 @@ void AAIGuard::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void PawnSeen(APawn* SeenPawn) 
+void AAIGuard::PawnSeen(APawn* SeenPawn) 
 {
 	if (SeenPawn)
 	{
-
+		//UE_LOG(LogTemp, Warning, TEXT("WE SEE"));
 		DrawDebugSphere(GetWorld(), SeenPawn->GetActorLocation(), 32.0f, 12, FColor::Yellow, false, 10.0f);
 	}
 	
 }
+
+void AAIGuard::NoiseHeard(APawn* Pawn, const FVector& Location, float Volume)
+{
+	if (Pawn)
+	{
+		DrawDebugSphere(GetWorld(), Location, 32.0f, 12, FColor::Green, false, 10.0f);
+	}
+}
+

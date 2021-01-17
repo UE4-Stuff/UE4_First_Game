@@ -22,7 +22,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
 	void PawnSeen(APawn* SeenPawn);
+
+	UFUNCTION()
+	void NoiseHeard(APawn* Pawn, const FVector& Location, float Volume);
 
 public:	
 	// Called every frame
