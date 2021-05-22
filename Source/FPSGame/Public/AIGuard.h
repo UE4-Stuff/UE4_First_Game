@@ -28,6 +28,13 @@ protected:
 	UFUNCTION()
 	void NoiseHeard(APawn* Pawn, const FVector& Location, float Volume);
 
+	FRotator OGRot;
+
+	UFUNCTION()
+	void ResetRot();
+
+	FTimerHandle TH_ResetRot;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

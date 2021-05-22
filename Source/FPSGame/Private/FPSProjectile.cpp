@@ -28,18 +28,23 @@ AFPSProjectile::AFPSProjectile()
 	ProjectileMovement->bShouldBounce = true;
 
 	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+	InitialLifeSpan = 1.0f;
+	SetReplicates(true);
+	SetReplicateMovement(true);
 }
 
 
 void AFPSProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	MakeNoise(1.0f, GetInstigator());
+	if (GetLocalRole() == ROLE_Authority)
+	{
+		MakeNoise(1.0f, GetInstigator());
+		Destroy();
+	}
+	
 	// Only add impulse and destroy projectile if we hit a physics
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-
-		Destroy();
 	}
 }

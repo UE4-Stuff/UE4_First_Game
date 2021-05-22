@@ -41,11 +41,14 @@ void AObjective::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 	PlayFX();
-	
-	AFPSCharacter* Character = Cast<AFPSCharacter>(OtherActor);
-	if (Character) {
-		Character->HoldingObjective = true;
-		Destroy();
+	if (GetLocalRole() == ROLE_Authority)
+	{
+		AFPSCharacter* Character = Cast<AFPSCharacter>(OtherActor);
+		if (Character) 
+		{
+			Character->HoldingObjective = true;
+			Destroy();
+		}
 	}
 }
 

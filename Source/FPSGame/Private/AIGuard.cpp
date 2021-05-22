@@ -4,6 +4,7 @@
 #include "AIGuard.h"
 #include "Perception/PawnSensingComponent.h"
 #include "DrawDebugHelpers.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AAIGuard::AAIGuard()
@@ -20,7 +21,7 @@ AAIGuard::AAIGuard()
 void AAIGuard::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	OGRot = GetActorRotation();
 }
 
 // Called every frame
@@ -51,7 +52,22 @@ void AAIGuard::NoiseHeard(APawn* Pawn, const FVector& Location, float Volume)
 {
 	if (Pawn)
 	{
-		DrawDebugSphere(GetWorld(), Location, 32.0f, 12, FColor::Green, false, 10.0f);
+		DrawDebugSphere(GetWorld(), Location, 32.0f, 12, FColor::Green, false, 2.0f);
+
+		FVector Direction = Location - GetActorLocation();
+		Direction.Normalize();
+		FRotator LookAt = FRotationMatrix::MakeFromX(Direction).Rotator();
+		LookAt.Roll = 0.0f;
+		LookAt.Pitch = 0.0f;
+		SetActorRotation(LookAt);
+
+		GetWorldTimerManager().ClearTimer(TH_ResetRot);
+		GetWorldTimerManager().SetTimer(TH_ResetRot, this, &AAIGuard::ResetRot, 3.0f, false);
 	}
+}
+
+void AAIGuard::ResetRot()
+{
+	SetActorRotation(OGRot);
 }
 

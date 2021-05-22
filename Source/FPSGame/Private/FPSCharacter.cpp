@@ -52,20 +52,7 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void AFPSCharacter::Fire()
 {
-	// try and fire a projectile
-	if (ProjectileClass)
-	{
-		FVector MuzzleLocation = GunMeshComponent->GetSocketLocation("Muzzle");
-		FRotator MuzzleRotation = GunMeshComponent->GetSocketRotation("Muzzle");
-
-		//Set Spawn Collision Handling Override
-		FActorSpawnParameters ActorSpawnParams;
-		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-		ActorSpawnParams.Instigator = this;
-
-		// spawn the projectile at the muzzle
-		GetWorld()->SpawnActor<AFPSProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, ActorSpawnParams);
-	}
+	SFire();
 
 	// try and play the sound if specified
 	if (FireSound)
@@ -85,6 +72,29 @@ void AFPSCharacter::Fire()
 	}
 }
 
+void AFPSCharacter::SFire_Implementation()
+{
+	// try and fire a projectile
+	if (ProjectileClass)
+	{
+		FVector MuzzleLocation = GunMeshComponent->GetSocketLocation("Muzzle");
+		FRotator MuzzleRotation = GunMeshComponent->GetSocketRotation("Muzzle");
+
+		//Set Spawn Collision Handling Override
+		FActorSpawnParameters ActorSpawnParams;
+		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+		ActorSpawnParams.Instigator = this;
+
+		// spawn the projectile at the muzzle
+		GetWorld()->SpawnActor<AFPSProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, ActorSpawnParams);
+	}
+}
+
+
+bool AFPSCharacter::SFire_Validate()
+{
+	return true;
+}
 
 void AFPSCharacter::MoveForward(float Value)
 {
@@ -102,5 +112,18 @@ void AFPSCharacter::MoveRight(float Value)
 	{
 		// add movement in that direction
 		AddMovementInput(GetActorRightVector(), Value);
+	}
+}
+
+void AFPSCharacter::Tick(float Delta)
+{
+	Super::Tick(Delta);
+	if (!IsLocallyControlled()) 
+	{
+		FRotator Rot = CameraComponent->GetRelativeRotation();
+		Rot.Pitch = RemoteViewPitch * 1.4f;//11764f;// 705882353f;
+		CameraComponent->SetRelativeRotation(Rot);
+
+
 	}
 }
